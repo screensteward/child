@@ -3,5 +3,6 @@
 
 pub mod entities;
 pub mod errors;
+pub mod policy;
 
 pub use errors::ModelError;
