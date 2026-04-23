@@ -1,5 +1,6 @@
 //! Persistance `SQLCipher` pour `ScreenSteward` Core.
 
+pub mod dao;
 pub mod errors;
 pub mod store;
 
