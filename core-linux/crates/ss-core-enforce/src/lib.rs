@@ -3,6 +3,7 @@
 
 pub mod cgroup;
 pub mod cgroup_mock;
+pub mod enforcer;
 pub mod errors;
 pub mod idle;
 pub mod matcher;
