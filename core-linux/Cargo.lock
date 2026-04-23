@@ -1436,6 +1436,7 @@ dependencies = [
  "async-trait",
  "chrono",
  "parking_lot",
+ "rusqlite",
  "serde",
  "serde_json",
  "ss-core-enforce",
