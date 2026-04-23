@@ -7,3 +7,23 @@ rust-version.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+ss-core-model = { path = "../ss-core-model" }
+ss-core-store = { path = "../ss-core-store" }
+tokio.workspace = true
+tracing.workspace = true
+async-trait.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+sha2.workspace = true
+hex.workspace = true
+procfs.workspace = true
+zbus.workspace = true
+parking_lot.workspace = true
+
+[dev-dependencies]
+tempfile = "3"
