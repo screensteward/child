@@ -1,0 +1,25 @@
+# Flutter / Dart
+ui/.dart_tool/
+ui/build/
+ui/pubspec.lock
+
+# Rust (core-linux)
+core-linux/target/
+core-linux/Cargo.lock.bak
+
+# Swift (core-macos, core-ios)
+core-macos/.build/
+core-ios/.build/
+
+# Kotlin (core-android)
+core-android/.gradle/
+core-android/build/
+
+# C# (core-windows)
+core-windows/bin/
+core-windows/obj/
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
