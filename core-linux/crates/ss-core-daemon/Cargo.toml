@@ -7,3 +7,30 @@ rust-version.workspace = true
 
 [lints]
 workspace = true
+
+[[bin]]
+name = "screensteward-core"
+path = "src/main.rs"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+ss-core-model = { path = "../ss-core-model" }
+ss-core-store = { path = "../ss-core-store" }
+ss-core-enforce = { path = "../ss-core-enforce" }
+ss-core-ipc = { path = "../ss-core-ipc" }
+tokio = { workspace = true, features = ["full"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+tracing-journald.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+toml.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+async-trait.workspace = true
+parking_lot.workspace = true

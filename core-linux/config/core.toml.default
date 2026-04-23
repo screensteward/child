@@ -1,0 +1,23 @@
+# ScreenSteward Core — default (prod) configuration.
+
+[ipc]
+socket_path = "/run/screensteward.sock"
+
+[store]
+db_path       = "/var/lib/screensteward/core.db"
+key_fallback  = "/var/lib/screensteward/master.key"
+creds_sealed  = "/var/lib/screensteward/master.cred"
+creds_name    = "screensteward-master-key"
+
+[enforce]
+tick_seconds              = 5
+cpu_delta_threshold       = 5
+cgroup_root               = "/sys/fs/cgroup/screensteward.slice"
+gc_prev_missing_ticks     = 12
+
+[notifications]
+# System service without session bus: use LogNotifier only.
+use_desktop_notifier = false
+
+[logging]
+level = "info"
