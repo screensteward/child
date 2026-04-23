@@ -1,0 +1,67 @@
+name: core-linux
+
+on:
+  push:
+    branches: [ main, phase1 ]
+    paths:
+      - 'core-linux/**'
+      - '.github/workflows/core-linux.yml'
+  pull_request:
+    paths:
+      - 'core-linux/**'
+      - '.github/workflows/core-linux.yml'
+
+jobs:
+  fmt-clippy:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: core-linux
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.75
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: core-linux -> core-linux/target
+      - name: apt deps
+        run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev pkg-config
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+
+  test:
+    runs-on: ubuntu-24.04
+    needs: fmt-clippy
+    defaults:
+      run:
+        working-directory: core-linux
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.75
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: core-linux -> core-linux/target
+      - name: apt deps
+        run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev pkg-config
+      - name: install nextest
+        run: cargo install --locked cargo-nextest
+      - name: unit + integration tests (skip #[ignore])
+        run: cargo nextest run --workspace
+
+  build:
+    runs-on: ubuntu-24.04
+    needs: fmt-clippy
+    defaults:
+      run:
+        working-directory: core-linux
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.75
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: core-linux -> core-linux/target
+      - name: apt deps
+        run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev pkg-config
+      - name: release build
+        run: cargo build --workspace --release
