@@ -2,6 +2,7 @@
 
 pub mod dao;
 pub mod errors;
+pub mod keyring;
 pub mod store;
 
 pub use errors::{Result, StoreError};
