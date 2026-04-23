@@ -4,6 +4,7 @@
 pub mod cgroup;
 pub mod cgroup_mock;
 pub mod errors;
+pub mod idle;
 pub mod matcher;
 pub mod proc_scan;
 
