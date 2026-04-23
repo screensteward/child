@@ -14,11 +14,6 @@ use crate::server::MethodHandler;
 
 /// Build the dispatch table.
 ///
-/// Only registers the methods implemented in Task 16 (`auth.*`, `child.*`,
-/// `subscribe`, `unsubscribe`). Tasks 17-18 will add `family.*`,
-/// `policy.{create,update,delete,list}`, `extension.{grant,listPending,approve,deny}`,
-/// `usage.*`, and `system.*`.
-///
 /// Takes `state` by value: the function clones it into each handler, and
 /// passing by value makes the ownership transfer explicit.
 #[must_use]
@@ -55,6 +50,60 @@ pub fn registry(state: AppState) -> HashMap<String, Arc<dyn MethodHandler>> {
     // subscribe / unsubscribe (no auth, ties connection to fan-out)
     m.insert("subscribe".into(), Arc::new(child::Subscribe));
     m.insert("unsubscribe".into(), Arc::new(child::Unsubscribe));
+
+    // family.* + child.create/update (parent-facing, authenticated)
+    m.insert(
+        "family.bootstrap".into(),
+        Arc::new(family::Bootstrap(state.clone())),
+    );
+    m.insert(
+        "family.get".into(),
+        Arc::new(family::Get(state.clone())),
+    );
+    m.insert(
+        "child.create".into(),
+        Arc::new(family::ChildCreate(state.clone())),
+    );
+    m.insert(
+        "child.update".into(),
+        Arc::new(family::ChildUpdate(state.clone())),
+    );
+
+    // policy.* (parent-facing, authenticated)
+    m.insert(
+        "policy.create".into(),
+        Arc::new(policy::Create(state.clone())),
+    );
+    m.insert(
+        "policy.update".into(),
+        Arc::new(policy::Update(state.clone())),
+    );
+    m.insert(
+        "policy.delete".into(),
+        Arc::new(policy::Delete(state.clone())),
+    );
+    m.insert(
+        "policy.list".into(),
+        Arc::new(policy::List(state.clone())),
+    );
+
+    // extension.* parent side (authenticated)
+    m.insert(
+        "extension.grant".into(),
+        Arc::new(extension::Grant(state.clone())),
+    );
+    m.insert(
+        "extension.listPending".into(),
+        Arc::new(extension::ListPending(state.clone())),
+    );
+    m.insert(
+        "extension.approve".into(),
+        Arc::new(extension::Approve(state.clone())),
+    );
+    m.insert(
+        "extension.deny".into(),
+        Arc::new(extension::Deny(state.clone())),
+    );
 
     m
 }
