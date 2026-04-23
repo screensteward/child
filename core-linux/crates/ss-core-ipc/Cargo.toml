@@ -7,3 +7,23 @@ rust-version.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+ss-core-model = { path = "../ss-core-model" }
+ss-core-store = { path = "../ss-core-store" }
+ss-core-enforce = { path = "../ss-core-enforce" }
+tokio = { workspace = true, features = ["rt-multi-thread","macros","signal","net","sync","time","fs","io-util"] }
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+argon2.workspace = true
+parking_lot.workspace = true
+
+[dev-dependencies]
+tempfile = "3"
+tokio = { workspace = true, features = ["full","test-util"] }
