@@ -105,5 +105,17 @@ pub fn registry(state: AppState) -> HashMap<String, Arc<dyn MethodHandler>> {
         Arc::new(extension::Deny(state.clone())),
     );
 
+    // usage.* (parent-facing, authenticated)
+    m.insert(
+        "usage.getReport".into(),
+        Arc::new(usage::GetReport(state.clone())),
+    );
+
+    // system.* (parent-facing, authenticated)
+    m.insert(
+        "system.getCoreStatus".into(),
+        Arc::new(system::GetCoreStatus(state.clone())),
+    );
+
     m
 }
