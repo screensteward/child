@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Phase 0 placeholder
+        run: |
+          echo "Phase 0 scaffolding — no code to test yet."
+          echo "Phase 1 will add Flutter UI tests and Rust core tests."
+          test -f README.md
+          test -f LICENSE
+          test -f CODE_OF_CONDUCT.md
+          test -f SECURITY.md
+          test -f CLAUDE.md
