@@ -2,8 +2,13 @@
 
 pub mod child;
 pub mod device;
+pub mod exception;
 pub mod family;
+pub mod idempotency;
 pub mod parent;
+pub mod policy;
+pub mod signature;
+pub mod usage;
 
 use chrono::{DateTime, Utc};
 
