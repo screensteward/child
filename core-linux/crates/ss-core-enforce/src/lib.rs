@@ -4,5 +4,7 @@
 pub mod cgroup;
 pub mod cgroup_mock;
 pub mod errors;
+pub mod matcher;
+pub mod proc_scan;
 
 pub use errors::{EnforceError, Result};
