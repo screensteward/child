@@ -11,6 +11,7 @@
 use async_trait::async_trait;
 use serde_json::Value;
 use std::collections::HashMap;
+use std::os::unix::fs::PermissionsExt as _;
 use std::path::PathBuf;
 use std::sync::Arc;
 use tokio::net::{UnixListener, UnixStream};
@@ -137,6 +138,16 @@ impl Server {
         // Clean up a stale socket from a previous run.
         let _ = std::fs::remove_file(&self.sock_path);
         let listener = UnixListener::bind(&self.sock_path)?;
+
+        // Set socket permissions to 0660 so group members can connect.
+        std::fs::set_permissions(&self.sock_path, std::fs::Permissions::from_mode(0o660))?;
+        // Optionally chown the socket to a specific group (best-effort).
+        if let Ok(grp) = std::env::var("SS_SOCK_GROUP") {
+            if let Ok(Some(group)) = nix::unistd::Group::from_name(&grp) {
+                let _ = nix::unistd::chown(&self.sock_path, None, Some(group.gid));
+            }
+        }
+
         info!(path = ?self.sock_path, "IPC listener started");
 
         loop {

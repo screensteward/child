@@ -1,0 +1,30 @@
+[Unit]
+Description=ScreenSteward Core
+Documentation=https://github.com/screensteward/child
+After=network.target systemd-tmpfiles-setup.service
+Wants=systemd-tmpfiles-setup.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/screensteward-core
+Restart=on-failure
+RestartSec=2s
+User=root
+Group=root
+
+# Security — hardened but compatible with cgroups v2 + /var/lib writes.
+NoNewPrivileges=no
+ProtectSystem=strict
+ReadWritePaths=/var/lib/screensteward /run /sys/fs/cgroup
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+PrivateTmp=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+
+[Install]
+WantedBy=multi-user.target

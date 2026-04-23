@@ -24,6 +24,7 @@ uuid.workspace = true
 argon2.workspace = true
 parking_lot.workspace = true
 rusqlite.workspace = true
+nix = { version = "0.28", features = ["user", "fs"] }
 
 [dev-dependencies]
 tempfile = "3"

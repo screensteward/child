@@ -34,3 +34,37 @@ chrono.workspace = true
 uuid.workspace = true
 async-trait.workspace = true
 parking_lot.workspace = true
+
+[package.metadata.deb]
+maintainer = "ScreenSteward contributors <contact@screensteward.app>"
+copyright = "2026, ScreenSteward contributors"
+license-file = ["../../../LICENSE", "0"]
+extended-description = "ScreenSteward Core — Linux systemd system service (Phase 1 MVP)."
+depends = "adduser"
+section = "admin"
+priority = "optional"
+maintainer-scripts = "../../packaging/debian/"
+assets = [
+    ["target/release/screensteward-core", "/usr/local/bin/", "755"],
+    ["target/release/screensteward-ctl", "/usr/local/bin/", "755"],
+    ["systemd/screensteward-core.service", "/etc/systemd/system/", "644"],
+    ["systemd/screensteward-core.tmpfiles.conf", "/usr/lib/tmpfiles.d/screensteward-core.conf", "644"],
+    ["config/core.toml.default", "/etc/screensteward/core.toml", "644"],
+]
+systemd-units = { unit-name = "screensteward-core", enable = true, start = true }
+
+[package.metadata.generate-rpm]
+license = "GPL-3.0-only"
+summary = "ScreenSteward Core — Linux systemd system service (MVP)"
+assets = [
+    { source = "target/release/screensteward-core", dest = "/usr/local/bin/screensteward-core", mode = "755" },
+    { source = "target/release/screensteward-ctl",  dest = "/usr/local/bin/screensteward-ctl",  mode = "755" },
+    { source = "systemd/screensteward-core.service", dest = "/etc/systemd/system/screensteward-core.service", mode = "644" },
+    { source = "systemd/screensteward-core.tmpfiles.conf", dest = "/usr/lib/tmpfiles.d/screensteward-core.conf", mode = "644" },
+    { source = "config/core.toml.default", dest = "/etc/screensteward/core.toml", mode = "644" },
+]
+post_install_script = """
+getent group screensteward >/dev/null || groupadd -r screensteward
+systemctl daemon-reload >/dev/null 2>&1 || true
+systemd-tmpfiles --create /usr/lib/tmpfiles.d/screensteward-core.conf >/dev/null 2>&1 || true
+"""
