@@ -1,0 +1,51 @@
+# ScreenSteward Core (Linux) — dev targets
+
+default:
+    @just --list
+
+# Compile all crates (debug).
+build:
+    cargo build --workspace
+
+# Compile release.
+release:
+    cargo build --workspace --release
+
+# Run all tests (excluding #[ignore]).
+test:
+    cargo nextest run --workspace
+
+# Also run #[ignore] tests (real cgroups). Requires root or privileged container.
+test-root:
+    cargo nextest run --workspace --run-ignored all
+
+# Format + clippy strict.
+check:
+    cargo fmt --all -- --check
+    cargo clippy --workspace --all-targets -- -D warnings
+
+# Local dogfood install (requires sudo).
+install: release
+    sudo install -Dm755 target/release/screensteward-core /usr/local/bin/screensteward-core
+    sudo install -Dm755 target/release/screensteward-ctl /usr/local/bin/screensteward-ctl
+    sudo install -Dm644 systemd/screensteward-core.service /etc/systemd/system/screensteward-core.service
+    sudo install -Dm644 systemd/screensteward-core.tmpfiles.conf /usr/lib/tmpfiles.d/screensteward-core.conf
+    sudo install -Dm644 config/core.toml.default /etc/screensteward/core.toml
+    sudo groupadd -f screensteward
+    sudo systemctl daemon-reload
+    sudo systemd-tmpfiles --create
+    sudo systemctl enable --now screensteward-core.service
+
+# Uninstall.
+uninstall:
+    -sudo systemctl disable --now screensteward-core.service
+    sudo rm -f /usr/local/bin/screensteward-core /usr/local/bin/screensteward-ctl
+    sudo rm -f /etc/systemd/system/screensteward-core.service
+    sudo rm -f /usr/lib/tmpfiles.d/screensteward-core.conf
+    sudo rm -rf /run/screensteward.sock
+    sudo systemctl daemon-reload
+    @echo "DB and key kept under /var/lib/screensteward — remove manually if needed."
+
+# Foreground dev run (socket under /tmp instead of /run).
+dev:
+    SS_SOCKET_PATH=/tmp/screensteward.sock SS_DB_PATH=./local/core.db cargo run -p ss-core-daemon
