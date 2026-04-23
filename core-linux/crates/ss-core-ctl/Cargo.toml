@@ -7,3 +7,17 @@ rust-version.workspace = true
 
 [lints]
 workspace = true
+
+[[bin]]
+name = "screensteward-ctl"
+path = "src/main.rs"
+
+[dependencies]
+ss-core-ipc = { path = "../ss-core-ipc" }
+tokio = { workspace = true, features = ["full"] }
+clap.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+rpassword = "7"
