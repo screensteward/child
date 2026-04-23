@@ -7,3 +7,27 @@ rust-version.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+ss-core-model = { path = "../ss-core-model" }
+rusqlite.workspace = true
+refinery.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+parking_lot.workspace = true
+hex.workspace = true
+
+[build-dependencies]
+refinery = { version = "0.8", features = ["rusqlite"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[features]
+default = []
+test-util = []
