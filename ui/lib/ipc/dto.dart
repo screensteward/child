@@ -4,7 +4,7 @@ part 'dto.freezed.dart';
 part 'dto.g.dart';
 
 @freezed
-class CoreStatus with _$CoreStatus {
+abstract class CoreStatus with _$CoreStatus {
   const factory CoreStatus({
     required String version,
     @JsonKey(name: 'uptime_seconds') required int uptimeSeconds,
@@ -17,7 +17,7 @@ class CoreStatus with _$CoreStatus {
 }
 
 @freezed
-class ChildStatus with _$ChildStatus {
+abstract class ChildStatus with _$ChildStatus {
   const factory ChildStatus({
     @JsonKey(name: 'today_minutes_used') required int todayMinutesUsed,
     @JsonKey(name: 'today_budget_minutes') int? todayBudgetMinutes,
@@ -32,7 +32,7 @@ class ChildStatus with _$ChildStatus {
 }
 
 @freezed
-class AppUsage with _$AppUsage {
+abstract class AppUsage with _$AppUsage {
   const factory AppUsage({
     @JsonKey(name: 'content_hash') required String contentHash,
     @JsonKey(name: 'display_name') String? displayName,
@@ -43,7 +43,7 @@ class AppUsage with _$AppUsage {
 }
 
 @freezed
-class DailyReport with _$DailyReport {
+abstract class DailyReport with _$DailyReport {
   const factory DailyReport({
     required DateTime date,
     @JsonKey(name: 'usage_by_app') required List<AppUsage> usageByApp,

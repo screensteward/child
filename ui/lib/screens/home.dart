@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../ipc/dto.dart';
 import '../state/status_controller.dart';
 import '../widgets/budget_ring.dart';
 import 'request_extension.dart';
@@ -45,7 +46,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  static String _windowLabel(s) {
+  static String _windowLabel(ChildStatus s) {
     if (!s.currentWindowOpen) return 'Créneau fermé';
     final ends = s.currentWindowEndsAt;
     if (ends == null) return 'Créneau actif';
