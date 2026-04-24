@@ -102,7 +102,7 @@ pub fn list_active(store: &Store, child_id: Uuid, now: &DateTime<Utc>) -> Result
     Ok(all
         .into_iter()
         .filter(|p| {
-            p.active_from.map_or(true, |t| t <= *now) && p.active_until.map_or(true, |t| t > *now)
+            p.active_from.is_none_or(|t| t <= *now) && p.active_until.is_none_or(|t| t > *now)
         })
         .collect())
 }
