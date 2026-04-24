@@ -49,6 +49,35 @@ jobs:
       - name: unit + integration tests (skip #[ignore])
         run: cargo nextest run --workspace
 
+  test-root:
+    # Exercises the #[ignore]'d tests that need real cgroups v2 / namespaces.
+    # No such tests exist yet (Phase 1 core uses a mock cgroup backend), but
+    # the infra is wired now so they light up automatically when we add
+    # them. `ignored-only` makes the job a no-op until then.
+    runs-on: ubuntu-24.04
+    needs: test
+    container:
+      image: ubuntu:24.04
+      options: --privileged
+    defaults:
+      run:
+        working-directory: core-linux
+    steps:
+      - uses: actions/checkout@v4
+      - name: apt deps
+        run: |
+          apt-get update
+          apt-get install -y curl build-essential libdbus-1-dev pkg-config ca-certificates
+      - name: install rust
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+            | sh -s -- -y --default-toolchain 1.93 --profile minimal
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - name: install nextest
+        run: cargo install --locked cargo-nextest
+      - name: test root (cgroups v2 réels, #[ignore])
+        run: cargo nextest run --workspace --run-ignored ignored-only
+
   build:
     runs-on: ubuntu-24.04
     needs: fmt-clippy
