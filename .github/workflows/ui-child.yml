@@ -54,3 +54,6 @@ jobs:
 
       - name: build linux (debug)
         run: flutter build linux --debug
+
+      - name: build linux (release)
+        run: flutter build linux --release
