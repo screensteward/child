@@ -37,8 +37,8 @@ impl MethodHandler for Login {
     }
 
     async fn call(&self, ctx: MethodContext<'_>, params: Value) -> Result<Value> {
-        let p: LoginParams = serde_json::from_value(params)
-            .map_err(|e| IpcError::InvalidParams(e.to_string()))?;
+        let p: LoginParams =
+            serde_json::from_value(params).map_err(|e| IpcError::InvalidParams(e.to_string()))?;
 
         let Some(parent_row) = parent::get_single(&self.0.store)? else {
             return Err(IpcError::Rpc(
@@ -100,8 +100,8 @@ impl MethodHandler for ChangePassword {
     }
 
     async fn call(&self, _ctx: MethodContext<'_>, params: Value) -> Result<Value> {
-        let p: ChangePasswordParams = serde_json::from_value(params)
-            .map_err(|e| IpcError::InvalidParams(e.to_string()))?;
+        let p: ChangePasswordParams =
+            serde_json::from_value(params).map_err(|e| IpcError::InvalidParams(e.to_string()))?;
 
         let Some(parent_row) = parent::get_single(&self.0.store)? else {
             return Err(IpcError::Rpc("no parent configured".into()));

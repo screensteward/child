@@ -40,11 +40,7 @@ impl MockCgroup {
 
     #[must_use]
     pub fn was_killed(&self, id: &AppScopeId) -> bool {
-        self.inner
-            .lock()
-            .scopes
-            .get(id)
-            .is_some_and(|s| s.killed)
+        self.inner.lock().scopes.get(id).is_some_and(|s| s.killed)
     }
 }
 
@@ -98,10 +94,6 @@ impl CgroupBackend for MockCgroup {
     }
 
     fn is_frozen(&self, id: &AppScopeId) -> bool {
-        self.inner
-            .lock()
-            .scopes
-            .get(id)
-            .is_some_and(|s| s.frozen)
+        self.inner.lock().scopes.get(id).is_some_and(|s| s.frozen)
     }
 }

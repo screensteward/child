@@ -54,7 +54,8 @@ impl MethodHandler for Create {
             modified_at: now,
         };
         dao::policy::insert(&self.0.store, &pol)?;
-        ctx.notifier.emit("policyChanged", json!({ "policy_id": pol.id }));
+        ctx.notifier
+            .emit("policyChanged", json!({ "policy_id": pol.id }));
         Ok(json!({ "id": pol.id }))
     }
 }
@@ -178,8 +179,10 @@ impl MethodHandler for Delete {
         let p: DeleteParams =
             serde_json::from_value(params).map_err(|e| IpcError::InvalidParams(e.to_string()))?;
         dao::policy::delete(&self.0.store, p.id)?;
-        ctx.notifier
-            .emit("policyChanged", json!({ "policy_id": p.id, "deleted": true }));
+        ctx.notifier.emit(
+            "policyChanged",
+            json!({ "policy_id": p.id, "deleted": true }),
+        );
         Ok(json!({ "ok": true }))
     }
 }
@@ -206,8 +209,7 @@ impl MethodHandler for List {
     }
 
     async fn call(&self, _ctx: MethodContext<'_>, params: Value) -> Result<Value> {
-        let p: ListParams =
-            serde_json::from_value(params).unwrap_or(ListParams { child_id: None });
+        let p: ListParams = serde_json::from_value(params).unwrap_or(ListParams { child_id: None });
         let child_id = if let Some(id) = p.child_id {
             id
         } else {

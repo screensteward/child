@@ -99,11 +99,10 @@ impl IdleSource for LogindIdleSource {
         .await
         .map_err(|e| EnforceError::DBus(e.to_string()))?;
 
-        let sessions: Vec<(String, u32, String, String, zbus::zvariant::OwnedObjectPath)> =
-            manager
-                .call("ListSessions", &())
-                .await
-                .map_err(|e| EnforceError::DBus(e.to_string()))?;
+        let sessions: Vec<(String, u32, String, String, zbus::zvariant::OwnedObjectPath)> = manager
+            .call("ListSessions", &())
+            .await
+            .map_err(|e| EnforceError::DBus(e.to_string()))?;
 
         for (_id, _uid, _user, _seat, path) in sessions {
             let session = zbus::Proxy::new(

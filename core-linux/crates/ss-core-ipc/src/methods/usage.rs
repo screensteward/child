@@ -53,9 +53,7 @@ impl MethodHandler for GetReport {
         };
 
         let to = p.to.unwrap_or_else(|| Utc::now().date_naive());
-        let from = p
-            .from
-            .unwrap_or_else(|| to - chrono::Duration::days(7));
+        let from = p.from.unwrap_or_else(|| to - chrono::Duration::days(7));
 
         let mut days = Vec::new();
         let mut d = from;

@@ -24,9 +24,6 @@ fn env_overrides_socket_path() {
     let toml = include_str!("../../../config/core.toml.default");
     let mut c: Config = toml::from_str(toml).expect("default TOML must parse");
     c.apply_env();
-    assert_eq!(
-        c.ipc.socket_path,
-        std::path::PathBuf::from("/tmp/ss.sock")
-    );
+    assert_eq!(c.ipc.socket_path, std::path::PathBuf::from("/tmp/ss.sock"));
     std::env::remove_var("SS_SOCKET_PATH");
 }

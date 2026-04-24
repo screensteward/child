@@ -60,7 +60,10 @@ pub fn update(store: &Store, p: &Policy) -> Result<()> {
 /// Returns [`crate::errors::StoreError::Sqlite`] on I/O error.
 pub fn delete(store: &Store, id: Uuid) -> Result<()> {
     store.with_conn(|c| {
-        c.execute("DELETE FROM policy WHERE id = ?1", rusqlite::params![id.to_string()])?;
+        c.execute(
+            "DELETE FROM policy WHERE id = ?1",
+            rusqlite::params![id.to_string()],
+        )?;
         Ok(())
     })
 }
@@ -99,8 +102,7 @@ pub fn list_active(store: &Store, child_id: Uuid, now: &DateTime<Utc>) -> Result
     Ok(all
         .into_iter()
         .filter(|p| {
-            p.active_from.map_or(true, |t| t <= *now)
-                && p.active_until.map_or(true, |t| t > *now)
+            p.active_from.map_or(true, |t| t <= *now) && p.active_until.map_or(true, |t| t > *now)
         })
         .collect())
 }

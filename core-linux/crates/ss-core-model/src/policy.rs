@@ -7,9 +7,13 @@ use uuid::Uuid;
 pub enum Scope {
     Child,
     /// Réservé Phase 2+.
-    Device { device_id: Uuid },
+    Device {
+        device_id: Uuid,
+    },
     /// Réservé Phase 3+.
-    Category { name: String },
+    Category {
+        name: String,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

@@ -48,7 +48,10 @@ fn setup() -> (AppState, Uuid) {
         },
     )
     .unwrap();
-    (AppState::new(s, NotificationEmitter::new(), false, "0.1.0"), child_id)
+    (
+        AppState::new(s, NotificationEmitter::new(), false, "0.1.0"),
+        child_id,
+    )
 }
 
 #[tokio::test]
@@ -95,10 +98,7 @@ async fn subscribe_records_topics() {
         notifier: &emitter,
     };
     Subscribe
-        .call(
-            ctx,
-            json!({"topics": ["usageUpdate", "policyChanged"]}),
-        )
+        .call(ctx, json!({"topics": ["usageUpdate", "policyChanged"]}))
         .await
         .unwrap();
     assert!(cs.is_subscribed("usageUpdate"));

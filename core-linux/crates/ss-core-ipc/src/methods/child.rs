@@ -15,7 +15,9 @@ use uuid::Uuid;
 
 use ss_core_model::evaluator::Action;
 use ss_core_model::policy::{Policy, Rule};
-use ss_core_store::dao::{child as child_dao, exception, family, policy, signature as sig_dao, usage};
+use ss_core_store::dao::{
+    child as child_dao, exception, family, policy, signature as sig_dao, usage,
+};
 
 use crate::app_state::AppState;
 use crate::dto::{AppUsage, ChildStatus, DailyReport};
@@ -254,8 +256,8 @@ impl MethodHandler for Subscribe {
     }
 
     async fn call(&self, ctx: MethodContext<'_>, params: Value) -> Result<Value> {
-        let p: SubscribeParams = serde_json::from_value(params)
-            .map_err(|e| IpcError::InvalidParams(e.to_string()))?;
+        let p: SubscribeParams =
+            serde_json::from_value(params).map_err(|e| IpcError::InvalidParams(e.to_string()))?;
         ctx.conn_state.subscribe(p.topics.clone());
         Ok(json!({ "subscribed": p.topics }))
     }
@@ -289,10 +291,7 @@ impl MethodHandler for Unsubscribe {
 /// Returns `(is_open, window_ends_at)` for the first `TimeWindow` rule found
 /// across all policies. If no `TimeWindow` rule exists the window is
 /// considered always open.
-fn window_state(
-    policies: &[Policy],
-    now: &DateTime<Utc>,
-) -> (bool, Option<DateTime<Utc>>) {
+fn window_state(policies: &[Policy], now: &DateTime<Utc>) -> (bool, Option<DateTime<Utc>>) {
     for p in policies {
         for r in &p.rules {
             if let Rule::TimeWindow(tw) = r {
@@ -339,11 +338,7 @@ fn collect_blocklist_display(policies: &[Policy]) -> Vec<String> {
 /// per-process evaluation requires a live candidate; this simplified version
 /// considers the session blocked only when budget/window rules would block
 /// any process — not implemented here.
-fn last_enforced_action(
-    _policies: &[Policy],
-    _used: u32,
-    _now: &DateTime<Utc>,
-) -> Action {
+fn last_enforced_action(_policies: &[Policy], _used: u32, _now: &DateTime<Utc>) -> Action {
     Action::Allow
 }
 

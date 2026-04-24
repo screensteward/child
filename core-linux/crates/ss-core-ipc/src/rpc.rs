@@ -40,7 +40,12 @@ impl Response {
     /// Construct a successful JSON-RPC 2.0 response.
     #[must_use]
     pub fn ok(id: Value, result: Value) -> Self {
-        Self { jsonrpc: "2.0".into(), id, result: Some(result), error: None }
+        Self {
+            jsonrpc: "2.0".into(),
+            id,
+            result: Some(result),
+            error: None,
+        }
     }
 
     /// Construct an error JSON-RPC 2.0 response.
@@ -50,7 +55,11 @@ impl Response {
             jsonrpc: "2.0".into(),
             id,
             result: None,
-            error: Some(RpcError { code, message: message.into(), data: None }),
+            error: Some(RpcError {
+                code,
+                message: message.into(),
+                data: None,
+            }),
         }
     }
 }

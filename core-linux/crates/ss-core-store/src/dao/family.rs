@@ -14,7 +14,12 @@ pub fn insert(store: &Store, f: &Family) -> Result<()> {
     store.with_conn(|c| {
         c.execute(
             "INSERT INTO family (id,name,created_at,modified_at) VALUES (?1,?2,?3,?4)",
-            rusqlite::params![f.id.to_string(), f.name, ts(&f.created_at), ts(&f.modified_at)],
+            rusqlite::params![
+                f.id.to_string(),
+                f.name,
+                ts(&f.created_at),
+                ts(&f.modified_at)
+            ],
         )?;
         Ok(())
     })

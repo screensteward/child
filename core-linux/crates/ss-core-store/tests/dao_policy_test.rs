@@ -10,16 +10,29 @@ fn seed() -> (tempfile::TempDir, Store, Uuid) {
     let d = tempdir().unwrap();
     let s = Store::open_with_key(&d.path().join("c.db"), &[0u8; 32]).unwrap();
     let fam_id = Uuid::new_v4();
-    dao::family::insert(&s, &Family {
-        id: fam_id, name: "F".into(),
-        created_at: Utc::now(), modified_at: Utc::now(),
-    }).unwrap();
+    dao::family::insert(
+        &s,
+        &Family {
+            id: fam_id,
+            name: "F".into(),
+            created_at: Utc::now(),
+            modified_at: Utc::now(),
+        },
+    )
+    .unwrap();
     let child_id = Uuid::new_v4();
-    dao::child::insert(&s, &Child {
-        id: child_id, family_id: fam_id,
-        display_name: "B".into(), birth_year: None,
-        created_at: Utc::now(), modified_at: Utc::now(),
-    }).unwrap();
+    dao::child::insert(
+        &s,
+        &Child {
+            id: child_id,
+            family_id: fam_id,
+            display_name: "B".into(),
+            birth_year: None,
+            created_at: Utc::now(),
+            modified_at: Utc::now(),
+        },
+    )
+    .unwrap();
     (d, s, child_id)
 }
 
@@ -51,17 +64,26 @@ fn policy_all_active_returns_only_active() {
     let (_d, s, child_id) = seed();
     let now = Utc::now();
     let active = Policy {
-        id: Uuid::new_v4(), child_id, scope: Scope::Child,
-        rules: vec![], priority: 0,
-        active_from: None, active_until: None,
-        created_at: now, modified_at: now,
+        id: Uuid::new_v4(),
+        child_id,
+        scope: Scope::Child,
+        rules: vec![],
+        priority: 0,
+        active_from: None,
+        active_until: None,
+        created_at: now,
+        modified_at: now,
     };
     let expired = Policy {
-        id: Uuid::new_v4(), child_id, scope: Scope::Child,
-        rules: vec![], priority: 0,
+        id: Uuid::new_v4(),
+        child_id,
+        scope: Scope::Child,
+        rules: vec![],
+        priority: 0,
         active_from: None,
         active_until: Some(now - chrono::Duration::hours(1)),
-        created_at: now, modified_at: now,
+        created_at: now,
+        modified_at: now,
     };
     dao::policy::insert(&s, &active).unwrap();
     dao::policy::insert(&s, &expired).unwrap();

@@ -14,8 +14,13 @@ pub struct ProcessCandidate {
 #[serde(tag = "action", rename_all = "snake_case")]
 pub enum Action {
     Allow,
-    Warn { reason: String, remaining_minutes: u32 },
-    Block { reason: String },
+    Warn {
+        reason: String,
+        remaining_minutes: u32,
+    },
+    Block {
+        reason: String,
+    },
 }
 
 /// Seuil de warning (en minutes restantes) pour `DailyBudget`.
@@ -48,22 +53,34 @@ pub fn evaluate(
             match rule {
                 Rule::AppBlocklist { matchers } => {
                     if matchers.iter().any(|m| {
-                        m.matches(process.content_hash.as_deref(), &process.basename, &process.path)
+                        m.matches(
+                            process.content_hash.as_deref(),
+                            &process.basename,
+                            &process.path,
+                        )
                     }) {
-                        return Action::Block { reason: "blocklist".into() };
+                        return Action::Block {
+                            reason: "blocklist".into(),
+                        };
                     }
                 }
                 Rule::AppAllowlist { matchers } => {
                     has_allowlist = true;
                     if matchers.iter().any(|m| {
-                        m.matches(process.content_hash.as_deref(), &process.basename, &process.path)
+                        m.matches(
+                            process.content_hash.as_deref(),
+                            &process.basename,
+                            &process.path,
+                        )
                     }) {
                         allow_match = true;
                     }
                 }
                 Rule::DailyBudget(b) => {
                     if usage_today_minutes >= b.minutes {
-                        return Action::Block { reason: "budget_exceeded".into() };
+                        return Action::Block {
+                            reason: "budget_exceeded".into(),
+                        };
                     }
                     let remaining = b.minutes - usage_today_minutes;
                     if remaining <= WARN_THRESHOLD_MIN {
@@ -75,7 +92,9 @@ pub fn evaluate(
                 }
                 Rule::TimeWindow(tw) => {
                     if !tw.is_open(now) {
-                        return Action::Block { reason: "window_closed".into() };
+                        return Action::Block {
+                            reason: "window_closed".into(),
+                        };
                     }
                 }
             }
@@ -83,7 +102,9 @@ pub fn evaluate(
     }
 
     if has_allowlist && !allow_match {
-        return Action::Block { reason: "not_in_allowlist".into() };
+        return Action::Block {
+            reason: "not_in_allowlist".into(),
+        };
     }
 
     warn.unwrap_or(Action::Allow)

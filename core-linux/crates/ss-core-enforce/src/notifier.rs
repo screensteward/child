@@ -87,14 +87,14 @@ impl DesktopNotifier for DBusNotifier {
             .call(
                 "Notify",
                 &(
-                    "ScreenSteward",          // app_name
-                    0u32,                     // replaces_id
-                    "dialog-information",     // app_icon
+                    "ScreenSteward",      // app_name
+                    0u32,                 // replaces_id
+                    "dialog-information", // app_icon
                     summary,
                     body,
-                    Vec::<String>::new(),     // actions
-                    hints,                    // hints
-                    5000i32,                  // expire_timeout_ms
+                    Vec::<String>::new(), // actions
+                    hints,                // hints
+                    5000i32,              // expire_timeout_ms
                 ),
             )
             .await

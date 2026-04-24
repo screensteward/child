@@ -71,9 +71,15 @@ pub fn record_event(
              (id,child_id,device_id,content_hash,basename,path,started_at,ended_at,category)
              VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9)",
             rusqlite::params![
-                id.to_string(), child_id.to_string(), device_id.to_string(),
-                content_hash, basename, path,
-                ts(started_at), ended_at.map(ts), category,
+                id.to_string(),
+                child_id.to_string(),
+                device_id.to_string(),
+                content_hash,
+                basename,
+                path,
+                ts(started_at),
+                ended_at.map(ts),
+                category,
             ],
         )?;
         Ok(())

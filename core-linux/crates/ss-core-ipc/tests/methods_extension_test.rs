@@ -55,14 +55,14 @@ async fn grant_creates_approved_not_pending() {
         notifier: &emitter,
     };
     let v = Grant(state.clone())
-        .call(
-            ctx,
-            json!({ "child_id": child_id, "duration_minutes": 15 }),
-        )
+        .call(ctx, json!({ "child_id": child_id, "duration_minutes": 15 }))
         .await
         .unwrap();
     assert!(v["id"].is_string(), "grant should return an id");
-    assert!(v["expires_at"].is_string(), "grant should return expires_at");
+    assert!(
+        v["expires_at"].is_string(),
+        "grant should return expires_at"
+    );
 
     // A granted exception is already Approved → pending list must be empty.
     let cs2 = ConnState::new();
@@ -72,10 +72,7 @@ async fn grant_creates_approved_not_pending() {
         conn_state: &cs2,
         notifier: &emitter2,
     };
-    let pending = ListPending(state)
-        .call(ctx2, json!({}))
-        .await
-        .unwrap();
+    let pending = ListPending(state).call(ctx2, json!({})).await.unwrap();
     assert_eq!(
         pending["pending"].as_array().unwrap().len(),
         0,
@@ -98,10 +95,7 @@ async fn grant_emits_extension_granted_notification() {
         notifier: &emitter,
     };
     Grant(state)
-        .call(
-            ctx,
-            json!({ "child_id": child_id, "duration_minutes": 10 }),
-        )
+        .call(ctx, json!({ "child_id": child_id, "duration_minutes": 10 }))
         .await
         .unwrap();
 

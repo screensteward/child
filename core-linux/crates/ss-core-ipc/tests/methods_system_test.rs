@@ -19,7 +19,10 @@ async fn core_status_exposes_version_uptime_tpm() {
         conn_state: &cs,
         notifier: &state.emitter,
     };
-    let v = GetCoreStatus(state.clone()).call(ctx, json!({})).await.unwrap();
+    let v = GetCoreStatus(state.clone())
+        .call(ctx, json!({}))
+        .await
+        .unwrap();
     assert_eq!(v["version"], json!("0.1.0"));
     assert_eq!(v["tpm_used"], json!(true));
     assert_eq!(v["db_ok"], json!(true));

@@ -1,7 +1,7 @@
+use serde_json::{json, Value};
 use std::path::Path;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 use tokio::net::UnixStream;
-use serde_json::{json, Value};
 
 pub struct CtlClient {
     reader: BufReader<tokio::net::unix::OwnedReadHalf>,
@@ -21,7 +21,11 @@ impl CtlClient {
     pub async fn connect(socket: &Path) -> anyhow::Result<Self> {
         let s = UnixStream::connect(socket).await?;
         let (r, w) = s.into_split();
-        Ok(Self { reader: BufReader::new(r), writer: w, next_id: 1 })
+        Ok(Self {
+            reader: BufReader::new(r),
+            writer: w,
+            next_id: 1,
+        })
     }
 
     pub async fn call(&mut self, method: &str, params: Value) -> anyhow::Result<Value> {

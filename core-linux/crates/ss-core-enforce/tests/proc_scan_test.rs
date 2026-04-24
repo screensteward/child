@@ -26,7 +26,15 @@ fn cache_returns_same_hash_for_same_inode_mtime_size() {
 
 #[test]
 fn hash_key_differentiates_mtime() {
-    let a = HashKey { inode: 1, mtime: 100, size: 42 };
-    let b = HashKey { inode: 1, mtime: 101, size: 42 };
+    let a = HashKey {
+        inode: 1,
+        mtime: 100,
+        size: 42,
+    };
+    let b = HashKey {
+        inode: 1,
+        mtime: 101,
+        size: 42,
+    };
     assert_ne!(a, b);
 }

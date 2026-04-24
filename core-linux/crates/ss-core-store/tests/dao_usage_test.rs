@@ -8,11 +8,41 @@ fn seed() -> (tempfile::TempDir, Store, Uuid, Uuid) {
     let d = tempdir().unwrap();
     let s = Store::open_with_key(&d.path().join("c.db"), &[0u8; 32]).unwrap();
     let fam_id = Uuid::new_v4();
-    dao::family::insert(&s, &Family { id: fam_id, name: "F".into(), created_at: Utc::now(), modified_at: Utc::now() }).unwrap();
+    dao::family::insert(
+        &s,
+        &Family {
+            id: fam_id,
+            name: "F".into(),
+            created_at: Utc::now(),
+            modified_at: Utc::now(),
+        },
+    )
+    .unwrap();
     let child_id = Uuid::new_v4();
-    dao::child::insert(&s, &Child { id: child_id, family_id: fam_id, display_name: "B".into(), birth_year: None, created_at: Utc::now(), modified_at: Utc::now() }).unwrap();
+    dao::child::insert(
+        &s,
+        &Child {
+            id: child_id,
+            family_id: fam_id,
+            display_name: "B".into(),
+            birth_year: None,
+            created_at: Utc::now(),
+            modified_at: Utc::now(),
+        },
+    )
+    .unwrap();
     let device_id = Uuid::new_v4();
-    dao::device::insert(&s, &ChildDevice { id: device_id, child_id, hostname: "h".into(), platform: Platform::Linux, last_seen_at: Utc::now() }).unwrap();
+    dao::device::insert(
+        &s,
+        &ChildDevice {
+            id: device_id,
+            child_id,
+            hostname: "h".into(),
+            platform: Platform::Linux,
+            last_seen_at: Utc::now(),
+        },
+    )
+    .unwrap();
     (d, s, child_id, device_id)
 }
 
@@ -30,10 +60,17 @@ fn usage_counter_increments_idempotent_per_day() {
 fn usage_events_recorded() {
     let (_d, s, child_id, device_id) = seed();
     dao::usage::record_event(
-        &s, child_id, device_id,
-        "sha256:abc", "steam", "/usr/bin/steam",
-        &Utc::now(), None, None,
-    ).unwrap();
+        &s,
+        child_id,
+        device_id,
+        "sha256:abc",
+        "steam",
+        "/usr/bin/steam",
+        &Utc::now(),
+        None,
+        None,
+    )
+    .unwrap();
     let n = dao::usage::count_events_for_child(&s, child_id).unwrap();
     assert_eq!(n, 1);
 }

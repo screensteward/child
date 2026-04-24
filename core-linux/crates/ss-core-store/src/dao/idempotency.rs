@@ -30,7 +30,12 @@ pub fn get(store: &Store, request_id: Uuid) -> Result<Option<String>> {
 /// # Errors
 ///
 /// Returns [`crate::errors::StoreError::Sqlite`] on I/O error.
-pub fn put(store: &Store, request_id: Uuid, response_json: &str, seen_at: &DateTime<Utc>) -> Result<()> {
+pub fn put(
+    store: &Store,
+    request_id: Uuid,
+    response_json: &str,
+    seen_at: &DateTime<Utc>,
+) -> Result<()> {
     store.with_conn(|c| {
         c.execute(
             "INSERT OR IGNORE INTO idempotency (request_id,response_json,seen_at)

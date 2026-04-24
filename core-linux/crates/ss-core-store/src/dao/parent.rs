@@ -16,8 +16,12 @@ pub fn insert(store: &Store, p: &Parent) -> Result<()> {
             "INSERT INTO parent (id,family_id,display_name,auth_hash,created_at,modified_at)
              VALUES (?1,?2,?3,?4,?5,?6)",
             rusqlite::params![
-                p.id.to_string(), p.family_id.to_string(), p.display_name,
-                p.auth_hash, ts(&p.created_at), ts(&p.modified_at),
+                p.id.to_string(),
+                p.family_id.to_string(),
+                p.display_name,
+                p.auth_hash,
+                ts(&p.created_at),
+                ts(&p.modified_at),
             ],
         )?;
         Ok(())
@@ -39,14 +43,16 @@ pub fn get(store: &Store, id: Uuid) -> Result<Parent> {
             "SELECT id,family_id,display_name,auth_hash,created_at,modified_at
              FROM parent WHERE id = ?1",
             rusqlite::params![id.to_string()],
-            |row| Ok((
-                row.get::<_, String>(0)?,
-                row.get::<_, String>(1)?,
-                row.get::<_, String>(2)?,
-                row.get::<_, String>(3)?,
-                row.get::<_, String>(4)?,
-                row.get::<_, String>(5)?,
-            )),
+            |row| {
+                Ok((
+                    row.get::<_, String>(0)?,
+                    row.get::<_, String>(1)?,
+                    row.get::<_, String>(2)?,
+                    row.get::<_, String>(3)?,
+                    row.get::<_, String>(4)?,
+                    row.get::<_, String>(5)?,
+                ))
+            },
         )
         .map_err(|e| match e {
             rusqlite::Error::QueryReturnedNoRows => StoreError::NotFound,

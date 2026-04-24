@@ -56,10 +56,7 @@ pub fn registry(state: AppState) -> HashMap<String, Arc<dyn MethodHandler>> {
         "family.bootstrap".into(),
         Arc::new(family::Bootstrap(state.clone())),
     );
-    m.insert(
-        "family.get".into(),
-        Arc::new(family::Get(state.clone())),
-    );
+    m.insert("family.get".into(), Arc::new(family::Get(state.clone())));
     m.insert(
         "child.create".into(),
         Arc::new(family::ChildCreate(state.clone())),
@@ -82,10 +79,7 @@ pub fn registry(state: AppState) -> HashMap<String, Arc<dyn MethodHandler>> {
         "policy.delete".into(),
         Arc::new(policy::Delete(state.clone())),
     );
-    m.insert(
-        "policy.list".into(),
-        Arc::new(policy::List(state.clone())),
-    );
+    m.insert("policy.list".into(), Arc::new(policy::List(state.clone())));
 
     // extension.* parent side (authenticated)
     m.insert(

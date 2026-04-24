@@ -62,11 +62,15 @@ fn time_window_open_at() {
         start: NaiveTime::from_hms_opt(16, 0, 0).unwrap(),
         end: NaiveTime::from_hms_opt(20, 0, 0).unwrap(),
     };
-    let wed_17h = NaiveDate::from_ymd_opt(2026, 4, 22).unwrap() // mercredi
-        .and_hms_opt(17, 0, 0).unwrap();
+    let wed_17h = NaiveDate::from_ymd_opt(2026, 4, 22)
+        .unwrap() // mercredi
+        .and_hms_opt(17, 0, 0)
+        .unwrap();
     assert!(tw.is_open(&wed_17h.and_utc()));
-    let sat_17h = NaiveDate::from_ymd_opt(2026, 4, 25).unwrap() // samedi
-        .and_hms_opt(17, 0, 0).unwrap();
+    let sat_17h = NaiveDate::from_ymd_opt(2026, 4, 25)
+        .unwrap() // samedi
+        .and_hms_opt(17, 0, 0)
+        .unwrap();
     assert!(!tw.is_open(&sat_17h.and_utc()));
 }
 
