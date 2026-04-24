@@ -1,7 +1,6 @@
 # Flutter / Dart
 ui/.dart_tool/
 ui/build/
-ui/pubspec.lock
 
 # Rust (core-linux)
 core-linux/target/
