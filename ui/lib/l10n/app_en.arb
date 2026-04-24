@@ -1,0 +1,20 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "ScreenSteward",
+
+  "commonError": "Error: {error}",
+
+  "homeRemaining": "left",
+  "homeBlockedList": "Blocked: {list}",
+  "homeWindowClosed": "Window closed",
+  "homeWindowOpen": "Window open",
+  "homeWindowOpenUntil": "Window open until {end}",
+  "homeRequestExtension": "Request more time",
+
+  "requestExtensionTitle": "Extension request",
+  "requestExtensionReasonLabel": "Why? (optional)",
+  "requestExtensionSubmit": "Send",
+  "requestExtensionSubmitting": "Sending…",
+  "requestExtensionSent": "Sent (ticket {ticketId})"
+}

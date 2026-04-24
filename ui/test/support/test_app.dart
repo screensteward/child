@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'l10n/app_localizations.dart';
-import 'screens/home.dart';
+import 'package:screensteward_child/l10n/app_localizations.dart';
 
-class ScreenStewardChildApp extends StatelessWidget {
-  const ScreenStewardChildApp({super.key});
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-    onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
-    theme: ThemeData(useMaterial3: true),
+/// [MaterialApp] wired with the app's localisation delegates and a pinned
+/// `fr` locale so widget tests can assert on translated strings
+/// deterministically.
+MaterialApp testApp({required Widget home, Locale locale = const Locale('fr')}) {
+  return MaterialApp(
+    home: home,
+    locale: locale,
     localizationsDelegates: const [
       AppLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,
@@ -18,6 +17,5 @@ class ScreenStewardChildApp extends StatelessWidget {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: AppLocalizations.supportedLocales,
-    home: const HomeScreen(),
   );
 }

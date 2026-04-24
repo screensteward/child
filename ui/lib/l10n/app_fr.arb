@@ -1,0 +1,32 @@
+{
+  "@@locale": "fr",
+
+  "appTitle": "ScreenSteward",
+
+  "commonError": "Erreur : {error}",
+  "@commonError": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "homeRemaining": "restant",
+  "homeBlockedList": "Bloquées : {list}",
+  "@homeBlockedList": {
+    "placeholders": { "list": { "type": "String" } }
+  },
+  "homeWindowClosed": "Créneau fermé",
+  "homeWindowOpen": "Créneau actif",
+  "homeWindowOpenUntil": "Créneau actif jusqu'à {end}",
+  "@homeWindowOpenUntil": {
+    "placeholders": { "end": { "type": "String" } }
+  },
+  "homeRequestExtension": "Demander plus de temps",
+
+  "requestExtensionTitle": "Demande d'extension",
+  "requestExtensionReasonLabel": "Pourquoi ? (optionnel)",
+  "requestExtensionSubmit": "Envoyer",
+  "requestExtensionSubmitting": "Envoi…",
+  "requestExtensionSent": "Envoyé (ticket {ticketId})",
+  "@requestExtensionSent": {
+    "placeholders": { "ticketId": { "type": "String" } }
+  }
+}

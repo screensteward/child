@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:screensteward_child/ipc/dto.dart';
 import 'package:screensteward_child/screens/home.dart';
 import 'package:screensteward_child/state/status_controller.dart';
+
+import '../support/test_app.dart';
 
 void main() {
   testWidgets('home shows remaining time and blocklist', (t) async {
@@ -22,7 +23,7 @@ void main() {
         overrides: [
           statusControllerProvider.overrideWith((ref) => Stream.value(status)),
         ],
-        child: const MaterialApp(home: HomeScreen()),
+        child: testApp(home: const HomeScreen()),
       ),
     );
     await t.pumpAndSettle();
@@ -48,7 +49,7 @@ void main() {
         overrides: [
           statusControllerProvider.overrideWith((ref) => Stream.value(status)),
         ],
-        child: const MaterialApp(home: HomeScreen()),
+        child: testApp(home: const HomeScreen()),
       ),
     );
     await t.pumpAndSettle();

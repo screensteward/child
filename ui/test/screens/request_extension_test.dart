@@ -9,6 +9,8 @@ import 'package:screensteward_child/ipc/client.dart';
 import 'package:screensteward_child/screens/request_extension.dart';
 import 'package:screensteward_child/state/status_controller.dart';
 
+import '../support/test_app.dart';
+
 /// A minimal JSON-RPC Unix-socket mock that records inbound requests and
 /// replies with a caller-supplied result. Uses **real** sockets, so callers
 /// must drive it inside [WidgetTester.runAsync] — `pumpAndSettle` alone does
@@ -84,7 +86,7 @@ void main() {
     await t.pumpWidget(
       ProviderScope(
         overrides: [ipcClientProvider.overrideWith((ref) async => client)],
-        child: const MaterialApp(home: RequestExtensionScreen()),
+        child: testApp(home: const RequestExtensionScreen()),
       ),
     );
     await t.pump();
@@ -118,7 +120,7 @@ void main() {
     await t.pumpWidget(
       ProviderScope(
         overrides: [ipcClientProvider.overrideWith((ref) async => client)],
-        child: const MaterialApp(home: RequestExtensionScreen()),
+        child: testApp(home: const RequestExtensionScreen()),
       ),
     );
     await t.pump();

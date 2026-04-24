@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/app_localizations.dart';
 import '../state/status_controller.dart';
 
 class RequestExtensionScreen extends ConsumerStatefulWidget {
@@ -25,8 +26,9 @@ class _RequestExtensionScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text("Demande d'extension")),
+      appBar: AppBar(title: Text(l10n.requestExtensionTitle)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -35,15 +37,19 @@ class _RequestExtensionScreenState
             TextField(
               controller: _ctrl,
               maxLines: 3,
-              decoration: const InputDecoration(
-                labelText: 'Pourquoi ? (optionnel)',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.requestExtensionReasonLabel,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: _sending ? null : _send,
-              child: Text(_sending ? 'Envoi…' : 'Envoyer'),
+              child: Text(
+                _sending
+                    ? l10n.requestExtensionSubmitting
+                    : l10n.requestExtensionSubmit,
+              ),
             ),
             if (_status != null)
               Padding(
@@ -57,6 +63,7 @@ class _RequestExtensionScreenState
   }
 
   Future<void> _send() async {
+    final l10n = AppLocalizations.of(context);
     setState(() {
       _sending = true;
       _status = null;
@@ -71,12 +78,12 @@ class _RequestExtensionScreenState
               as Map<String, dynamic>;
       if (!mounted) return;
       setState(() {
-        _status = 'Envoyé (ticket ${r['ticket_id']})';
+        _status = l10n.requestExtensionSent(r['ticket_id'].toString());
       });
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _status = 'Erreur : $e';
+        _status = l10n.commonError(e.toString());
       });
     } finally {
       if (mounted) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
+
 class BudgetRing extends StatelessWidget {
   final int used;
   final int? budget;
@@ -8,6 +10,7 @@ class BudgetRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final hasBudget = budget != null && budget! > 0;
     final ratio = hasBudget ? (used / budget!).clamp(0.0, 1.0) : 0.0;
     final remaining = hasBudget ? (budget! - used).clamp(0, budget!) : 0;
@@ -32,7 +35,10 @@ class BudgetRing extends StatelessWidget {
                 hasBudget ? '$remaining min' : '—',
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
-              Text('restant', style: Theme.of(context).textTheme.bodyMedium),
+              Text(
+                l10n.homeRemaining,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ],
           ),
         ],

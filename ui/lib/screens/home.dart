@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../ipc/dto.dart';
+import '../l10n/app_localizations.dart';
 import '../state/status_controller.dart';
 import '../widgets/budget_ring.dart';
 import 'request_extension.dart';
@@ -11,12 +12,13 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final status = ref.watch(statusControllerProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('ScreenSteward')),
+      appBar: AppBar(title: Text(l10n.appTitle)),
       body: status.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Erreur : $e')),
+        error: (e, _) => Center(child: Text(l10n.commonError(e.toString()))),
         data: (s) => Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -26,10 +28,10 @@ class HomeScreen extends ConsumerWidget {
                 budget: s.todayBudgetMinutes,
               ),
               const SizedBox(height: 24),
-              Text(_windowLabel(s)),
+              Text(_windowLabel(l10n, s)),
               const SizedBox(height: 8),
               if (s.activeBlocklistDisplay.isNotEmpty)
-                Text('Bloquées : ${s.activeBlocklistDisplay.join(", ")}'),
+                Text(l10n.homeBlockedList(s.activeBlocklistDisplay.join(', '))),
               const Spacer(),
               FilledButton(
                 onPressed: () => Navigator.of(context).push(
@@ -37,7 +39,7 @@ class HomeScreen extends ConsumerWidget {
                     builder: (_) => const RequestExtensionScreen(),
                   ),
                 ),
-                child: const Text('Demander plus de temps'),
+                child: Text(l10n.homeRequestExtension),
               ),
             ],
           ),
@@ -46,11 +48,11 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  static String _windowLabel(ChildStatus s) {
-    if (!s.currentWindowOpen) return 'Créneau fermé';
+  static String _windowLabel(AppLocalizations l10n, ChildStatus s) {
+    if (!s.currentWindowOpen) return l10n.homeWindowClosed;
     final ends = s.currentWindowEndsAt;
-    if (ends == null) return 'Créneau actif';
-    return "Créneau actif jusqu'à ${_fmtHm(ends)}";
+    if (ends == null) return l10n.homeWindowOpen;
+    return l10n.homeWindowOpenUntil(_fmtHm(ends));
   }
 
   static String _fmtHm(DateTime d) {
