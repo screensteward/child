@@ -65,9 +65,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: apt deps
+        # libsqlite3-dev: refinery-macros links against the system sqlite3.
+        # libssl-dev: sqlcipher bundled in libsqlite3-sys needs openssl/crypto.h.
+        # Both are preinstalled on the ubuntu-24.04 runner image but not in
+        # the clean container we use here for privileged execution.
         run: |
           apt-get update
-          apt-get install -y curl build-essential libdbus-1-dev pkg-config ca-certificates
+          apt-get install -y \
+            curl build-essential ca-certificates \
+            libdbus-1-dev libsqlite3-dev libssl-dev pkg-config
       - name: install rust
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
