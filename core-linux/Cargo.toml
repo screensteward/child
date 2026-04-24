@@ -12,7 +12,7 @@ members = [
 [workspace.package]
 edition = "2021"
 license = "GPL-3.0-only"
-rust-version = "1.75"
+rust-version = "1.93"
 authors = ["ScreenSteward contributors"]
 repository = "https://github.com/screensteward/child"
 

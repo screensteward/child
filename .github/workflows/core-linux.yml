@@ -19,7 +19,7 @@ jobs:
         working-directory: core-linux
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@1.75
+      - uses: dtolnay/rust-toolchain@1.93
         with:
           components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
@@ -38,7 +38,7 @@ jobs:
         working-directory: core-linux
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@1.75
+      - uses: dtolnay/rust-toolchain@1.93
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: core-linux -> core-linux/target
@@ -57,7 +57,7 @@ jobs:
         working-directory: core-linux
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@1.75
+      - uses: dtolnay/rust-toolchain@1.93
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: core-linux -> core-linux/target
