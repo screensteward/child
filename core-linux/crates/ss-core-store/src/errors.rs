@@ -14,6 +14,8 @@ pub enum StoreError {
     Serde(#[from] serde_json::Error),
     #[error("i/o: {0}")]
     Io(#[from] std::io::Error),
+    #[error("sealed credential is present but unreadable; refusing to fall back to file key (would corrupt existing DB): {0}")]
+    SealedCredUnreadable(Box<StoreError>),
 }
 
 pub type Result<T> = std::result::Result<T, StoreError>;

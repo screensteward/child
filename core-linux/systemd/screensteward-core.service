@@ -11,6 +11,7 @@ Restart=on-failure
 RestartSec=2s
 User=root
 Group=root
+Environment=SS_SOCK_GROUP=screensteward
 
 # Security — hardened but compatible with cgroups v2 + /var/lib writes.
 NoNewPrivileges=no

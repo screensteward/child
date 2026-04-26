@@ -79,6 +79,7 @@ impl Keyring for SystemdCredsKeyring {
             // systemd-creds decrypt <sealed> -
             let out = Command::new("systemd-creds")
                 .arg("decrypt")
+                .arg(format!("--name={}", self.name))
                 .arg(&self.sealed_path)
                 .arg("-")
                 .output()?;
@@ -133,6 +134,21 @@ pub struct LinuxKeyring {
 
 impl Keyring for LinuxKeyring {
     fn load_or_create(&self) -> Result<[u8; 32]> {
+        // Si le cred scellé existe déjà, on DOIT pouvoir le relire — sinon la DB
+        // (encryptée avec la clé du cred) devient irrécupérable. Basculer sur
+        // fallback à cet instant générerait une clé fraîche qui écraserait
+        // silencieusement une clé utilisable. On refuse explicitement. Cf. bug
+        // #7 dogfood 2026-04-24.
+        if self.systemd_creds.sealed_path.exists() {
+            return self
+                .systemd_creds
+                .load_or_create()
+                .map_err(|e| StoreError::SealedCredUnreadable(Box::new(e)));
+        }
+        // Pas de cred scellé : soit première install, soit systemd-creds n'a
+        // jamais été provisionné. On tente systemd-creds (qui créera le
+        // sealed), et on accepte un fallback fichier clé si l'outil n'est pas
+        // disponible sur cette machine.
         match self.systemd_creds.load_or_create() {
             Ok(k) => Ok(k),
             Err(e) => {
