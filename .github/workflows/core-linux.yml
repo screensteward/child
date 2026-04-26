@@ -52,10 +52,8 @@ jobs:
         run: cargo nextest run --workspace
 
   test-root:
-    # Exercises the #[ignore]'d tests that need real cgroups v2 / namespaces.
-    # No such tests exist yet (Phase 1 core uses a mock cgroup backend), but
-    # the infra is wired now so they light up automatically when we add
-    # them. `ignored-only` makes the job a no-op until then.
+    # Exercises the #[ignore]'d tests that need real cgroups v2 / namespaces /
+    # systemd-creds (privileged operations not safe in the regular `test` job).
     runs-on: ubuntu-24.04
     needs: test
     container:
@@ -69,13 +67,16 @@ jobs:
       - name: apt deps
         # libsqlite3-dev: refinery-macros links against the system sqlite3.
         # libssl-dev: sqlcipher bundled in libsqlite3-sys needs openssl/crypto.h.
-        # Both are preinstalled on the ubuntu-24.04 runner image but not in
-        # the clean container we use here for privileged execution.
+        # systemd: provides /usr/bin/systemd-creds, exercised by the keyring
+        # regression tests (bugs #6/#7 from Phase 1 dogfood Day 1).
+        # Both libs and systemd-creds are preinstalled on the ubuntu-24.04
+        # runner image but not in the clean container we use here.
         run: |
           apt-get update
           apt-get install -y \
             curl build-essential ca-certificates \
-            libdbus-1-dev libsqlite3-dev libssl-dev pkg-config
+            libdbus-1-dev libsqlite3-dev libssl-dev pkg-config \
+            systemd
       - name: install rust
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
