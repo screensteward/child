@@ -24,8 +24,27 @@ check:
     cargo fmt --all -- --check
     cargo clippy --workspace --all-targets -- -D warnings
 
+# Build l'UI Flutter enfant en release (via fvm, cf. .fvmrc).
+build-ui-child:
+    cd ../ui && fvm flutter build linux --release
+
+# Installe le bundle Flutter enfant dans /usr/local/lib/screensteward-child/ + .desktop.
+install-ui-child: build-ui-child
+    sudo install -d /usr/local/lib/screensteward-child
+    sudo rsync -a --delete ../ui/build/linux/x64/release/bundle/ /usr/local/lib/screensteward-child/
+    sudo install -Dm644 packaging/desktop/screensteward-child.desktop /usr/share/applications/screensteward-child.desktop
+    sudo install -Dm644 packaging/desktop/screensteward-child.png /usr/share/icons/hicolor/512x512/apps/screensteward-child.png
+    -sudo update-desktop-database /usr/share/applications 2>/dev/null || true
+
+# Uninstall du bundle Flutter enfant.
+uninstall-ui-child:
+    sudo rm -rf /usr/local/lib/screensteward-child
+    sudo rm -f /usr/share/applications/screensteward-child.desktop
+    sudo rm -f /usr/share/icons/hicolor/512x512/apps/screensteward-child.png
+    -sudo update-desktop-database /usr/share/applications 2>/dev/null || true
+
 # Local dogfood install (requires sudo).
-install: release
+install: release install-ui-child
     sudo install -Dm755 target/release/screensteward-core /usr/local/bin/screensteward-core
     sudo install -Dm755 target/release/screensteward-ctl /usr/local/bin/screensteward-ctl
     sudo install -Dm644 systemd/screensteward-core.service /etc/systemd/system/screensteward-core.service
@@ -37,7 +56,7 @@ install: release
     sudo systemctl enable --now screensteward-core.service
 
 # Uninstall.
-uninstall:
+uninstall: uninstall-ui-child
     -sudo systemctl disable --now screensteward-core.service
     sudo rm -f /usr/local/bin/screensteward-core /usr/local/bin/screensteward-ctl
     sudo rm -f /etc/systemd/system/screensteward-core.service
@@ -45,6 +64,9 @@ uninstall:
     sudo rm -rf /run/screensteward.sock
     sudo systemctl daemon-reload
     @echo "DB and key kept under /var/lib/screensteward — remove manually if needed."
+
+# Reinstall.
+reinstall: uninstall install
 
 # Foreground dev run (socket under /tmp instead of /run).
 dev:
