@@ -2,7 +2,7 @@ name: ui-child
 
 on:
   push:
-    branches: [main, phase1]
+    branches: [main, develop]
     paths:
       - 'ui/**'
       - '.github/workflows/ui-child.yml'

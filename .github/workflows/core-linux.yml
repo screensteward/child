@@ -2,7 +2,7 @@ name: core-linux
 
 on:
   push:
-    branches: [ main, phase1 ]
+    branches: [ main, develop ]
     paths:
       - 'core-linux/**'
       - '.github/workflows/core-linux.yml'
