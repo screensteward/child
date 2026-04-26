@@ -6,10 +6,12 @@ on:
     paths:
       - 'ui/**'
       - '.github/workflows/ui-child.yml'
+      - 'renovate.json'
   pull_request:
     paths:
       - 'ui/**'
       - '.github/workflows/ui-child.yml'
+      - 'renovate.json'
 
 jobs:
   flutter:

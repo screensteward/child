@@ -6,10 +6,12 @@ on:
     paths:
       - 'core-linux/**'
       - '.github/workflows/core-linux.yml'
+      - 'renovate.json'
   pull_request:
     paths:
       - 'core-linux/**'
       - '.github/workflows/core-linux.yml'
+      - 'renovate.json'
 
 jobs:
   fmt-clippy:
